@@ -5,11 +5,14 @@ const port = process.env.PORT || 5000;
 const db = require("./models/url");
 
 //setting up DB connection to mongoDB
-mongoose.connect("mongodb://localhost/urlShortener", {
-  //settings to avoid deprecation warnings
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://localhost/urlShortener",
+  {
+    //settings to avoid deprecation warnings
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+);
 
 //setting ejs middleware as our templating engine
 app.set("view engine", "ejs");
