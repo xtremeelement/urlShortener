@@ -6,10 +6,10 @@ WORKDIR /usr/src/app
 #Install dependencies
 COPY package*.json ./
 
-RUN npm Install
+RUN npm install
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD [ "node", "server.js"]
