@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const db = require("./models/url");
+const path = require("path");
 
 //setting up DB connection to mongoDB
 mongoose.connect(
@@ -24,9 +25,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("views"));
 
 //the home/index route to render our site page
-app.get("/", async (req, res) => {
-  const urls = await db.find();
-  res.render("index", { urls });
+// app.get("/", async (req, res) => {
+//   const urls = await db.find();
+//   res.render("index", { urls });
+// });
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/dist/index.html"));
 });
 
 //post route to handle the url submission
@@ -40,6 +45,7 @@ app.get("/:tinyUrl", async (req, res) => {
   const url = await db.findOne({ tiny_url: req.params.tinyUrl });
   if (url === null) return res.sendStatus(404);
 
+  //redirects user to original url
   res.redirect(url.target_url);
 });
 
