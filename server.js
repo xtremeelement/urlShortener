@@ -46,7 +46,7 @@ app.get("/:tinyUrl", async (req, res) => {
   const url = await db.findOne({ tiny_url: req.params.tinyUrl });
   if (url === null) return res.sendStatus(404);
 
-  res.send(url.target_url);
+  res.redirect(url.target_url);
 });
 
 //turning on the server
