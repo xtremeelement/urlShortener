@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const port = process.env.PORT || 5000;
 const db = require("./models/url");
+const cors = require("cors");
 
 //setting up DB connection to mongoDB
 mongoose.connect(
@@ -16,6 +17,8 @@ mongoose.connect(
 
 //setting ejs middleware as our templating engine
 app.set("view engine", "ejs");
+
+app.use(cors());
 
 //middleware to use a body parser and set nested objects to false
 app.use(express.urlencoded({ extended: false }));
