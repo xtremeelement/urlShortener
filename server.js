@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const port = process.env.PORT || 5000;
 const db = require("./models/url");
 const cors = require("cors");
+const morgan = require("morgan");
 
 //setting up DB connection to mongoDB
 mongoose.connect(
@@ -19,6 +20,7 @@ mongoose.connect(
 app.set("view engine", "ejs");
 
 app.use(cors());
+app.use(morgan("tiny"));
 
 //middleware to use a body parser and set nested objects to false
 app.use(express.urlencoded({ extended: false }));
@@ -29,13 +31,14 @@ app.use(express.static("views"));
 //the home/index route to render our site page
 app.get("/", async (req, res) => {
   const urls = await db.find();
-  res.render("index", { urls });
+  res.send(urls);
+  // res.render("index", { urls });
 });
 
 //post route to handle the url submission
 app.post("/getUrl", async (req, res) => {
   await db.create({ target_url: req.body.fullUrl });
-  res.redirect("/");
+  res.redirect("back");
 });
 
 //route to handle the redirect once the tiny_url is clicked on
@@ -43,7 +46,7 @@ app.get("/:tinyUrl", async (req, res) => {
   const url = await db.findOne({ tiny_url: req.params.tinyUrl });
   if (url === null) return res.sendStatus(404);
 
-  res.redirect(url.target_url);
+  res.send(url.target_url);
 });
 
 //turning on the server
